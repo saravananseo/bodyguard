@@ -1,0 +1,311 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&display=swap');
+:root{--bg:#0a0c10;--surface:#111318;--panel:#161a22;--border:#1e2535;--accent:#00e5ff;--accent2:#7c3aed;--danger:#ff3b5c;--warn:#ff8c00;--safe:#00e676;--text:#e8ecf4;--muted:#5a6580;}
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{padding:1.5rem 1rem 2rem;max-width:680px;margin:0 auto;background:var(--bg);font-family:'Syne',sans-serif;color:var(--text);}
+.bot-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;position:relative;overflow:hidden;}
+.bot-header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent2),var(--accent),var(--safe));}
+.bot-title h2{font-size:18px;font-weight:800;color:var(--accent);letter-spacing:0.04em;font-family:'Share Tech Mono',monospace;}
+.bot-title .subtitle{font-size:12px;color:var(--accent2);font-weight:700;margin-top:1px;font-family:'Share Tech Mono',monospace;letter-spacing:0.06em;}
+.bot-title p{font-size:11px;color:var(--muted);margin-top:3px;}
+.status-badge{display:flex;align-items:center;gap:6px;background:#001a0d;border:1px solid var(--safe);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--safe);font-family:'Share Tech Mono',monospace;margin-left:auto;white-space:nowrap;}
+.pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--safe);animation:pulse 1.4s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.7);}}
+.engine-note{background:#0d0a1a;border:1px solid #7c3aed55;border-radius:10px;padding:10px 14px;margin-bottom:1.25rem;font-size:12px;color:#a78bfa;display:flex;align-items:center;gap:8px;}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.25rem;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 8px;text-align:center;}
+.stat-num{font-size:20px;font-weight:800;font-family:'Share Tech Mono',monospace;line-height:1;}
+.stat-label{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.05em;}
+.analyzer{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1.25rem;}
+.analyzer-label{font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
+.input-row{display:flex;gap:8px;}
+.msg-input{flex:1;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:'Syne',sans-serif;font-size:14px;outline:none;transition:border 0.2s;}
+.msg-input:focus{border-color:var(--accent);}
+.msg-input::placeholder{color:var(--muted);}
+.scan-btn{background:var(--accent2);border:none;border-radius:8px;padding:10px 18px;color:#fff;font-family:'Share Tech Mono',monospace;font-size:13px;cursor:pointer;white-space:nowrap;transition:opacity 0.2s;}
+.scan-btn:hover{opacity:0.85;}
+.scan-btn:disabled{opacity:0.4;cursor:not-allowed;}
+.result-area{margin-top:1rem;display:none;}
+.verdict{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:700;font-family:'Share Tech Mono',monospace;margin-bottom:10px;}
+.verdict-safe{background:#001a0d;border:1px solid var(--safe);color:var(--safe);}
+.verdict-warn{background:#1a0d00;border:1px solid var(--warn);color:var(--warn);}
+.verdict-block{background:#1a000a;border:1px solid var(--danger);color:var(--danger);}
+.threat-bar{height:6px;background:var(--panel);border-radius:3px;overflow:hidden;margin:10px 0;}
+.threat-fill{height:100%;border-radius:3px;transition:width 0.7s cubic-bezier(.4,0,.2,1);}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.tag{font-size:11px;padding:3px 10px;border-radius:12px;font-family:'Share Tech Mono',monospace;}
+.tag-toxic{background:#2a0010;border:1px solid #ff3b5c44;color:#ff3b5c;}
+.tag-spam{background:#1a1000;border:1px solid #ff8c0044;color:#ff8c00;}
+.tag-safe{background:#001a0d;border:1px solid #00e67644;color:#00e676;}
+.tag-info{background:#000f1a;border:1px solid #00e5ff44;color:#00e5ff;}
+.threat-scores{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+.score-row{display:flex;flex-direction:column;gap:4px;}
+.score-lbl{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;}
+.score-lbl span{font-family:'Share Tech Mono',monospace;font-size:10px;}
+.mini-bar{height:4px;background:var(--panel);border-radius:2px;overflow:hidden;}
+.mini-fill{height:100%;border-radius:2px;transition:width 0.8s ease;}
+.feed{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1.25rem;}
+.feed-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.feed-title{font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;}
+.feed-list{display:flex;flex-direction:column;gap:6px;}
+.feed-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--panel);border-radius:7px;border-left:3px solid transparent;animation:fadeIn 0.3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateX(-6px);}to{opacity:1;transform:none;}}
+.feed-item.blocked{border-left-color:var(--danger);}
+.feed-item.warned{border-left-color:var(--warn);}
+.feed-item.allowed{border-left-color:var(--safe);}
+.feed-text{flex:1;font-size:12px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.feed-badge{font-size:10px;font-family:'Share Tech Mono',monospace;padding:2px 8px;border-radius:10px;flex-shrink:0;}
+.badge-block{background:#2a0010;color:#ff3b5c;}
+.badge-warn{background:#1a0d00;color:#ff8c00;}
+.badge-pass{background:#001a0d;color:#00e676;}
+.categories{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.25rem;}
+.cat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;}
+.cat-body h4{font-size:12px;font-weight:700;margin-bottom:2px;}
+.cat-body p{font-size:11px;color:var(--muted);line-height:1.5;}
+.try-section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;}
+.try-label{font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
+.try-grid{display:flex;flex-wrap:wrap;gap:6px;}
+.try-btn{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:5px 12px;color:var(--text);font-size:12px;cursor:pointer;transition:border 0.15s;font-family:'Share Tech Mono',monospace;}
+.try-btn:hover{border-color:var(--accent);}
+.try-btn.danger{border-color:#ff3b5c44;color:#ff3b5c;}
+.try-btn.warn{border-color:#ff8c0044;color:#ff8c00;}
+.try-btn.safe{border-color:#00e67644;color:#00e676;}
+.loading-scan{display:flex;align-items:center;gap:8px;color:var(--accent);font-family:'Share Tech Mono',monospace;font-size:12px;padding:12px 0;}
+.scan-dots span{animation:blink 0.8s step-end infinite;}
+.scan-dots span:nth-child(2){animation-delay:0.15s;}
+.scan-dots span:nth-child(3){animation-delay:0.3s;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+.eye-blink{animation:eyeblink 3.5s ease-in-out infinite;}
+@keyframes eyeblink{0%,88%,100%{transform:scaleY(1);}94%{transform:scaleY(0.05);}}
+.ring-idle{animation:rspin 3s linear infinite;transform-origin:28px 28px;}
+.ring-active{animation:rspin 0.3s linear infinite;transform-origin:28px 28px;}
+@keyframes rspin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+</style>
+
+<div class="wrap">
+  <div class="bot-header">
+    <div style="width:54px;height:54px;flex-shrink:0;">
+      <svg viewBox="0 0 56 56" fill="none" width="54" height="54" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="14" width="40" height="32" rx="8" fill="#1e2535" stroke="#00e5ff" stroke-width="1.2"/>
+        <rect x="18" y="22" width="8" height="7" rx="3" fill="#0a0c10" stroke="#00e5ff" stroke-width="1"/>
+        <rect x="30" y="22" width="8" height="7" rx="3" fill="#0a0c10" stroke="#00e5ff" stroke-width="1"/>
+        <rect x="20" y="24" width="4" height="3" rx="1.5" fill="#00e5ff" class="eye-blink"/>
+        <rect x="32" y="24" width="4" height="3" rx="1.5" fill="#00e5ff" class="eye-blink"/>
+        <rect x="21" y="34" width="14" height="3" rx="1.5" fill="#7c3aed"/>
+        <line x1="28" y1="14" x2="28" y2="8" stroke="#00e5ff" stroke-width="1.5"/>
+        <circle cx="28" cy="6" r="3" fill="#00e5ff"/>
+        <rect x="4" y="22" width="4" height="10" rx="2" fill="#1e2535"/>
+        <rect x="48" y="22" width="4" height="10" rx="2" fill="#1e2535"/>
+        <g id="scanRingG" class="ring-idle">
+          <circle cx="28" cy="28" r="22" stroke="#00e5ff33" stroke-width="1" stroke-dasharray="3 5"/>
+        </g>
+      </svg>
+    </div>
+    <div class="bot-title">
+      <h2>AGIL</h2>
+      <div class="subtitle">THE SOCIAL BODYGUARD</div>
+      <p>AI Content Shield — Real-time threat detection &amp; blocking</p>
+    </div>
+    <div class="status-badge"><div class="pulse-dot"></div>ONLINE</div>
+  </div>
+
+  <div class="engine-note">⚡ Agil v2 — Onboard pattern-intelligence engine. No API key needed, works instantly.</div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num" id="sBlocked" style="color:var(--danger)">0</div><div class="stat-label">Blocked</div></div>
+    <div class="stat-card"><div class="stat-num" id="sWarned" style="color:var(--warn)">0</div><div class="stat-label">Flagged</div></div>
+    <div class="stat-card"><div class="stat-num" id="sAllowed" style="color:var(--safe)">0</div><div class="stat-label">Passed</div></div>
+    <div class="stat-card"><div class="stat-num" id="sTotal" style="color:var(--accent)">0</div><div class="stat-label">Total</div></div>
+  </div>
+
+  <div class="analyzer">
+    <div class="analyzer-label">🛡 Agil Scanner — type or paste any message</div>
+    <div class="input-row">
+      <input class="msg-input" id="msgInput" placeholder="Let Agil scan your message for threats..." type="text" maxlength="500"/>
+      <button class="scan-btn" id="scanBtn" onclick="runScan()">SCAN ▶</button>
+    </div>
+    <div class="result-area" id="resultArea"></div>
+  </div>
+
+  <div class="feed">
+    <div class="feed-hdr">
+      <span class="feed-title">Agil Live Activity Feed</span>
+      <span style="font-size:11px;color:var(--muted);font-family:'Share Tech Mono',monospace" id="feedCount">0 scanned</span>
+    </div>
+    <div class="feed-list" id="feedList">
+      <div style="font-size:12px;color:var(--muted);text-align:center;padding:1rem;" data-empty="1">Agil is watching. Try the samples below or type your own.</div>
+    </div>
+  </div>
+
+  <div class="categories">
+    <div class="cat-card"><div style="font-size:18px;">☣</div><div class="cat-body"><h4 style="color:var(--danger)">Toxic &amp; Hate Speech</h4><p>Harassment, slurs, cyberbullying, targeted hate</p></div></div>
+    <div class="cat-card"><div style="font-size:18px;">🎣</div><div class="cat-body"><h4 style="color:var(--warn)">Scams &amp; Phishing</h4><p>Fraud, fake prizes, crypto scams, social engineering</p></div></div>
+    <div class="cat-card"><div style="font-size:18px;">📨</div><div class="cat-body"><h4 style="color:var(--warn)">Spam Detection</h4><p>Bot patterns, mass solicitation, fake promotions</p></div></div>
+    <div class="cat-card"><div style="font-size:18px;">🔞</div><div class="cat-body"><h4 style="color:var(--danger)">Harmful Content</h4><p>Threats, violence, illegal content, self-harm</p></div></div>
+  </div>
+
+  <div class="try-section">
+    <div class="try-label">⚡ Quick Test Samples — click to let Agil scan</div>
+    <div class="try-grid">
+      <button class="try-btn danger" onclick="quickScan(this.dataset.msg)" data-msg="I will find you and make you regret this, you're dead">☠ Direct Threat</button>
+      <button class="try-btn danger" onclick="quickScan(this.dataset.msg)" data-msg="You are worthless trash nobody wants you here go kill yourself">☣ Hate + Harm</button>
+      <button class="try-btn danger" onclick="quickScan(this.dataset.msg)" data-msg="Watch your back I know where you live I'm coming for you">🏠 Stalking</button>
+      <button class="try-btn warn" onclick="quickScan(this.dataset.msg)" data-msg="CONGRATULATIONS! You won $5000! Click http://claim-prize.xyz now!!!">🎣 Prize Scam</button>
+      <button class="try-btn warn" onclick="quickScan(this.dataset.msg)" data-msg="Send me 0.5 BTC and I'll double your investment guaranteed profit">💰 Crypto Scam</button>
+      <button class="try-btn warn" onclick="quickScan(this.dataset.msg)" data-msg="Buy cheap Viagra no prescription needed DM me best deals!!!">💊 Spam</button>
+      <button class="try-btn safe" onclick="quickScan(this.dataset.msg)" data-msg="Hey! Great post, really enjoyed reading it. Thanks for sharing!">✅ Normal</button>
+      <button class="try-btn safe" onclick="quickScan(this.dataset.msg)" data-msg="Can we meet for coffee tomorrow at 3pm? Let me know!">✅ Friendly</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var stats={blocked:0,warned:0,allowed:0,total:0};
+
+function normalise(text){
+  return text
+    .toLowerCase()
+    .replace(/[\u2018\u2019\u02bc\u0060\u00b4]/g,"'")
+    .replace(/[\u201c\u201d]/g,'"')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+var RULES=[
+  {cat:'harassment',label:'death threat',     score:90,re:/\byou'?re\s+(dead|finished|done)\b/},
+  {cat:'harassment',label:'death threat',     score:90,re:/\bi('?ll| will| am going to| gonna)\s+(kill|murder|end|destroy)\s+(you|u)\b/},
+  {cat:'harassment',label:'physical threat',  score:85,re:/\b(make|make\s+you)\s+regret\b/},
+  {cat:'harassment',label:'physical threat',  score:85,re:/\bwatch\s+your\s+back\b/},
+  {cat:'harassment',label:'find you threat',  score:88,re:/\bi('?ll| will| am going to| gonna)\s+find\s+(you|u)\b/},
+  {cat:'harassment',label:'stalking threat',  score:85,re:/\bi\s+know\s+where\s+you\s+(live|are|work|sleep)\b/},
+  {cat:'harassment',label:'coming for you',   score:87,re:/\bcoming\s+for\s+(you|u)\b/},
+  {cat:'harassment',label:'physical threat',  score:80,re:/\b(hurt|harm|beat|attack|assault)\s+(you|u)\b/},
+  {cat:'harassment',label:'threat',           score:75,re:/\byou('?ll|\s+will)\s+(pay|suffer|regret)\b/},
+  {cat:'harassment',label:'threat',           score:78,re:/\bmake\s+(you|u)\s+(pay|suffer|scream|cry|beg)\b/},
+  {cat:'harmful',   label:'self-harm urge',   score:92,re:/\b(go\s+)?(kill|hang)\s+your(self|s3lf)\b/},
+  {cat:'harmful',   label:'self-harm urge',   score:92,re:/\bkys\b/},
+  {cat:'harmful',   label:'self-harm urge',   score:88,re:/\bend\s+your\s+(life|existence)\b/},
+  {cat:'harmful',   label:'self-harm urge',   score:85,re:/\bcut\s+your(self)?\b/},
+  {cat:'harmful',   label:'worthless attack', score:70,re:/\b(no\s*body|no\s+one)\s+(wants|needs|likes)\s+(you|u)\b/},
+  {cat:'harmful',   label:'better off dead',  score:90,re:/\bbetter\s+off\s+dead\b/},
+  {cat:'harmful',   label:'better off dead',  score:90,re:/\bworld('?s| is)\s+better\s+without\s+you\b/},
+  {cat:'toxic',     label:'severe insult',    score:72,re:/\b(worthless|pathetic|disgusting|piece\s+of\s+(shit|crap)|scum|filth|trash)\b/},
+  {cat:'toxic',     label:'insult',           score:50,re:/\b(idiot|moron|loser|imbecile|retard|dumb(ass)?|jerk|creep|freak)\b/},
+  {cat:'toxic',     label:'profanity attack', score:55,re:/\b(shut\s+up|go\s+to\s+hell|drop\s+dead|you\s+suck|damn\s+you)\b/},
+  {cat:'hate_speech',label:'hate speech',     score:85,re:/\b(kill\s+all|death\s+to|inferior\s+race|go\s+back\s+to|not\s+welcome\s+here|belong\s+in\s+a\s+cage)\b/},
+  {cat:'scam',      label:'prize scam',       score:80,re:/\b(you\s+('?ve\s+)?won|you\s+are\s+(a\s+)?winner|congratulations.{0,30}(won|prize|reward))\b/},
+  {cat:'scam',      label:'click to claim',   score:78,re:/\bclick\s+(here\s+)?to\s+(claim|collect|receive)\b/},
+  {cat:'scam',      label:'crypto scam',      score:85,re:/\b(send|transfer)\s+[\d.]+\s*(btc|eth|usdt|crypto|bitcoin|ethereum)\b/},
+  {cat:'scam',      label:'investment scam',  score:82,re:/\b(double|triple|10x)\s+your\s+(investment|money|crypto|bitcoin)\b/},
+  {cat:'scam',      label:'guaranteed profit',score:75,re:/\bguaranteed\s+(profit|return|income|money)\b/},
+  {cat:'scam',      label:'phishing link',    score:70,re:/https?:\/\/[^\s]{5,}/},
+  {cat:'scam',      label:'bank scam',        score:78,re:/\b(wire\s+transfer|western\s+union|moneygram|gift\s+card)\b/},
+  {cat:'spam',      label:'follow spam',      score:60,re:/\b(follow\s*back|followback|f4f|l4l|like4like|follow4follow)\b/},
+  {cat:'spam',      label:'link in bio spam', score:55,re:/\b(link\s+in\s+(my\s+)?bio|check\s+my\s+(bio|profile))\b/},
+  {cat:'spam',      label:'buy spam',         score:55,re:/\b(buy\s+now|cheap\s+(viagra|cialis|meds|pills)|no\s+prescription)\b/},
+  {cat:'spam',      label:'work from home',   score:52,re:/\b(work\s+from\s+home|make\s+money\s+online|earn\s+from\s+home|passive\s+income)\b/},
+  {cat:'spam',      label:'excessive caps',   score:35,re:/([A-Z]{4,}\s+){2,}/},
+  {cat:'spam',      label:'excessive punctuation',score:30,re:/!{3,}/},
+  {cat:'spam',      label:'repetition',       score:28,re:/(.{3,})\1{2,}/},
+];
+
+function scoreText(text){
+  var norm=normalise(text);
+  var cats={toxic:0,hate_speech:0,harassment:0,harmful:0,scam:0,spam:0};
+  var threats=[];
+  RULES.forEach(function(rule){
+    if(rule.re.test(norm)){
+      cats[rule.cat]=Math.min(100,cats[rule.cat]+rule.score);
+      if(threats.indexOf(rule.label)===-1) threats.push(rule.label);
+    }
+  });
+  var vals=Object.values(cats);
+  var maxScore=Math.max.apply(null,vals);
+  var sumRest=vals.reduce(function(a,b){return a+b;},0)-maxScore;
+  var threatLevel=Math.min(100,Math.round(maxScore*0.75+sumRest*0.05));
+  var verdict=threatLevel>=68?'BLOCK':threatLevel>=32?'WARN':'PASS';
+  var actions={BLOCK:'Content blocked — Agil detected a threat',WARN:'Content flagged — Agil is watching',PASS:'Content cleared — safe to display'};
+  return{verdict:verdict,threat_level:threatLevel,categories:cats,detected_threats:threats.length?threats:['none detected'],action:actions[verdict]};
+}
+
+function updateStats(){
+  document.getElementById('sBlocked').textContent=stats.blocked;
+  document.getElementById('sWarned').textContent=stats.warned;
+  document.getElementById('sAllowed').textContent=stats.allowed;
+  document.getElementById('sTotal').textContent=stats.total;
+  document.getElementById('feedCount').textContent=stats.total+' scanned';
+}
+function setScanning(on){document.getElementById('scanRingG').className=on?'ring-active':'ring-idle';}
+function trunc(s,n){return s.length>n?s.slice(0,n)+'…':s;}
+
+function addFeedItem(msg,status,label){
+  var list=document.getElementById('feedList');
+  var emp=list.querySelector('[data-empty]');
+  if(emp)emp.remove();
+  var icons={blocked:'🛑',warned:'⚠️',allowed:'✅'};
+  var div=document.createElement('div');
+  div.className='feed-item '+status;
+  div.innerHTML='<span style="font-size:14px;flex-shrink:0;">'+icons[status]+'</span>'
+    +'<span class="feed-text">'+trunc(msg,52)+'</span>'
+    +'<span class="feed-badge badge-'+(status==='blocked'?'block':status==='warned'?'warn':'pass')+'">'+label+'</span>';
+  list.insertBefore(div,list.firstChild);
+  if(list.children.length>8)list.removeChild(list.lastChild);
+}
+
+function buildResult(r){
+  var vc=r.verdict==='BLOCK'?'verdict-block':r.verdict==='WARN'?'verdict-warn':'verdict-safe';
+  var ic=r.verdict==='BLOCK'?'🚫':r.verdict==='WARN'?'⚠️':'✅';
+  var bc=r.threat_level>=68?'var(--danger)':r.threat_level>=32?'var(--warn)':'var(--safe)';
+  var tl=r.threat_level;
+  var threats=r.detected_threats||[];
+  var tags=threats[0]==='none detected'
+    ?'<span class="tag tag-safe">clean content</span>'
+    :threats.map(function(t){
+        var cls=r.verdict==='BLOCK'?'tag-toxic':r.verdict==='WARN'?'tag-spam':'tag-info';
+        return '<span class="tag '+cls+'">'+t+'</span>';
+      }).join('');
+  var cats=r.categories||{};
+  var catHtml=Object.keys(cats).map(function(k){
+    var v=Math.min(100,Math.round(cats[k]));
+    var c=v>=68?'var(--danger)':v>=32?'var(--warn)':'var(--safe)';
+    return '<div class="score-row"><div class="score-lbl">'+k.replace(/_/g,' ')+'<span>'+v+'%</span></div>'
+      +'<div class="mini-bar"><div class="mini-fill" style="width:'+v+'%;background:'+c+'"></div></div></div>';
+  }).join('');
+  return '<div class="verdict '+vc+'">'+ic+' '+r.verdict+' — '+r.action+'</div>'
+    +'<div class="threat-bar"><div class="threat-fill" style="width:'+tl+'%;background:'+bc+'"></div></div>'
+    +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:10px;font-family:\'Share Tech Mono\',monospace">'
+    +'<span>Threat Level</span><span style="color:'+bc+'">'+tl+'/100</span></div>'
+    +'<div class="tags">'+tags+'</div>'
+    +(catHtml?'<div class="threat-scores">'+catHtml+'</div>':'');
+}
+
+function processMsg(msg){
+  var result=scoreText(msg);
+  var ra=document.getElementById('resultArea');
+  ra.style.display='block';
+  ra.innerHTML=buildResult(result);
+  stats.total++;
+  var lbl=result.detected_threats[0]==='none detected'?'SAFE':result.detected_threats[0];
+  if(result.verdict==='BLOCK'){stats.blocked++;addFeedItem(msg,'blocked',lbl);}
+  else if(result.verdict==='WARN'){stats.warned++;addFeedItem(msg,'warned',lbl);}
+  else{stats.allowed++;addFeedItem(msg,'allowed','SAFE');}
+  updateStats();
+}
+
+function runScan(){
+  var input=document.getElementById('msgInput');
+  var btn=document.getElementById('scanBtn');
+  var msg=input.value.trim();
+  if(!msg){input.focus();return;}
+  btn.disabled=true;
+  setScanning(true);
+  var ra=document.getElementById('resultArea');
+  ra.style.display='block';
+  ra.innerHTML='<div class="loading-scan"><span>🔍 AGIL SCANNING</span><span class="scan-dots"><span>.</span><span>.</span><span>.</span></span></div>';
+  setTimeout(function(){processMsg(msg);btn.disabled=false;setScanning(false);},500);
+}
+
+function quickScan(msg){document.getElementById('msgInput').value=msg;runScan();}
+document.getElementById('msgInput').addEventListener('keydown',function(e){if(e.key==='Enter')runScan();});
+</script>
